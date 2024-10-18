@@ -1,28 +1,47 @@
-<div>
-  <canvas id="myChart"></canvas>
-</div>
+let myChart;
+const dataPoints = [];
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-  const ctx = document.getElementById('myChart');
-
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
+function addDataPoint() {
+    const x = parseFloat(document.getElementById('input1').value);
+    const y = parseFloat(document.getElementById('input2').value);
+    
+    if (isNaN(x) || isNaN(y)) {
+        alert('Please enter valid numbers');
+        return;
     }
-  });
-</script>
+    
+    dataPoints.push({x, y});
+    updateChart();
+}
+
+function updateChart() {
+    if (myChart) {
+        myChart.destroy();
+    }
+    
+    const ctx = document.getElementById('myChart').getContext('2d');
+    myChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Data Points',
+                data: dataPoints,
+                backgroundColor: 'rgb(75, 192, 192)'
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom'
+                },
+                y: {
+                    type: 'linear'
+                }
+            }
+        }
+    });
+}
+
+// Initialize an empty chart
+updateChart();
