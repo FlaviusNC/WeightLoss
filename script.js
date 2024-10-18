@@ -1,44 +1,28 @@
-let myChart = null;
+<div>
+  <canvas id="myChart"></canvas>
+</div>
 
-function generateGraph() {
-    const input1 = parseFloat(document.getElementById('input1').value);
-    const input2 = parseFloat(document.getElementById('input2').value);
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    if (isNaN(input1) || isNaN(input2)) {
-        alert('Please enter valid numbers');
-        return;
-    }
+<script>
+  const ctx = document.getElementById('myChart');
 
-    const data = calculateData(input1, input2);
-
-    if (myChart) {
-        myChart.destroy();
-    }
-
-    const ctx = document.getElementById('myChart').getContext('2d');
-    myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: data.map((_, index) => index),
-            datasets: [{
-                label: 'Calculated Data',
-                data: data,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
         }
-    });
-}
-
-function calculateData(input1, input2) {
-    // Example calculation: Generate 10 points based on the inputs
-    return Array.from({length: 10}, (_, i) => input1 * Math.sin(i * input2));
-}
+      }
+    }
+  });
+</script>
