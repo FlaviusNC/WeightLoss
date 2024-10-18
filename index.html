@@ -3,57 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horizontal Bar Chart with Chart.js</title>
+    <title>Dynamic Horizontal Bar Chart with Chart.js</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        input {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div style="width: 80%; margin: auto;">
+    <div class="container">
+        <h1>Dynamic Horizontal Bar Chart</h1>
+        <div class="input-container">
+            <label for="input1">Value 1:</label>
+            <input type="number" id="input1" min="0" max="100" value="50">
+            <label for="input2">Value 2:</label>
+            <input type="number" id="input2" min="0" max="100" value="30">
+            <button onclick="updateChart()">Update Chart</button>
+        </div>
         <canvas id="myChart"></canvas>
     </div>
 
     <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5'],
-                datasets: [{
-                    label: 'Data',
-                    data: [12, 19, 3, 5, 2],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    }
+        let myChart;
+
+        function createChart(data) {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Bar 1', 'Bar 2'],
+                    datasets: [{
+                        label: 'Values',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
                 },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Horizontal Bar Chart'
-                    }
-                },
-                responsive: true
+                options: {
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    },
+                    responsive: true
+                }
+            });
+        }
+
+        function updateChart() {
+            const value1 = parseInt(document.getElementById('input1').value);
+            const value2 = parseInt(document.getElementById('input2').value);
+
+            if (isNaN(value1) || isNaN(value2)) {
+                alert('Please enter valid numbers');
+                return;
             }
-        });
+
+            if (myChart) {
+                myChart.data.datasets[0].data = [value1, value2];
+                myChart.update();
+            } else {
+                createChart([value1, value2]);
+            }
+        }
+
+        // Initialize chart with default values
+        updateChart();
     </script>
 </body>
 </html>
